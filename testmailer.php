@@ -2,7 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require __DIR__ . '/vendor/autoload.php';
+require 'vendor/autoload.php';
 
 $mail = new PHPMailer(true);
 
@@ -16,8 +16,7 @@ try {
     $mail->Port       = 587;
 
     $mail->setFrom('noreply@ivhub.com', 'IVHUB Test');
-    $mail->addAddress('riti@ivhub.com');
-    $mail->addAddress('desk@ivhub.com');
+    $mail->addAddress('dipesh.macair@gmail.com');
 
     $mail->isHTML(true);
     $mail->Subject = 'Test Email from IVHUB using SendGrid';
