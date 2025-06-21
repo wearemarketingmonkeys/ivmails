@@ -1,10 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
-echo "Autoload loaded!<br>";
-var_dump(class_exists('PHPMailer\\PHPMailer\\PHPMailer'));
-exit;
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
