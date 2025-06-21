@@ -1,6 +1,6 @@
 <?php
 $to = "riti@ivhub.com,desk@ivhub.com";
-$subject = "Laser Hair Removal Consent Form Submission | ".$_POST['fullName'];
+$subject = "Laser Hair Removal Consent Form Submission";
 
 // Build the HTML body
 $body = "<h2>Patient Information</h2>";
