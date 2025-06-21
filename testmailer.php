@@ -11,7 +11,7 @@ try {
     $mail->Host       = 'smtp.sendgrid.net';
     $mail->SMTPAuth   = true;
     $mail->Username   = 'apikey'; // literal 'apikey'
-    $mail->Password   = 'YOUR_SENDGRID_API_KEY'; // replace this with actual key
+    $mail->Password   = getenv('SENDGRID_API_KEY'); // replace this with actual key
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
@@ -24,8 +24,8 @@ try {
     $mail->Body    = '<h2>This is a test email</h2><p>Sent via SendGrid SMTP + PHPMailer on Render</p>';
 
     $mail->send();
-    echo json_encode(["message" => "✅ Email sent successfully via SendGrid!"]);
+    echo json_encode(["message" => "Email sent successfully via SendGrid!"]);
 } catch (Exception $e) {
-    echo json_encode(["message" => "❌ Email failed: {$mail->ErrorInfo}"]);
+    echo json_encode(["message" => "Email failed: {$mail->ErrorInfo}"]);
 }
 ?>
