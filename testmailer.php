@@ -15,7 +15,7 @@ try {
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
-    $mail->setFrom('no-reply@ivhub.com', 'IVHUB Test');
+    $mail->setFrom('noreply@ivhub.com', 'IVHUB Test');
     $mail->addAddress('riti@ivhub.com');
     $mail->addAddress('desk@ivhub.com');
 
