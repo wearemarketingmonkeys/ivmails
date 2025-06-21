@@ -8,7 +8,7 @@ $body .= "<p>Test Submission</p>";
 
 // Email headers
 $boundary = md5(time());
-$headers = "From: IVHUB Consent <hello@ivhub.com>\r\n";
+$headers = "From: IVHUB Consent <no-reply@ivhub.com>\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
 
