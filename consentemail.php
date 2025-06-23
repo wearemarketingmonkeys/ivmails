@@ -53,8 +53,7 @@ try {
             "<p><strong>Payment Mode:</strong> {$_POST['paymentMode']}</p>" .
             "<p><strong>Registered Nurse:</strong> {$_POST['nurse']}</p>" .
             "<p><strong>Referral:</strong> {$_POST['referral']}</p>" .
-            "<p><strong>Appointment Time:</strong> {$_POST['appointmentTime']}</p>" .
-            "<p><strong>Participant:</strong> {$_POST['participant']}</p>";
+            "<p><strong>Appointment Time:</strong> {$_POST['appointmentTime']}</p>";
 
     // Full consent HTML (your original content)
     $body .= <<<HTML
