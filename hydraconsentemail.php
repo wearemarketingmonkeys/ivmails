@@ -1,4 +1,10 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// CORS Origin Whitelist
 $allowed_origins = [
     "https://ivhubnew.onrender.com",
     "https://ivhub.com",
@@ -14,76 +20,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$to = "hello@ivhub.com,riti@ivhub.com,desk@ivhub.com";
-$subject = "HydraFacial Consent Form Submission | ".$_POST['fullName'];
+$mail = new PHPMailer(true);
 
-// MIME setup
-$boundary = md5(time());
-$headers = "From: IVHUB Consent <no-reply@ivhub.com>\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+try {
+    // SMTP setup
+    $mail->isSMTP();
+    $mail->Host       = 'smtp.sendgrid.net';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = 'apikey'; // Always this literal string
+    $mail->Password   = getenv('SENDGRID_API_KEY');
+    $mail->SMTPSecure = 'tls';
+    $mail->Port       = 587;
 
-// Build HTML email
-$body = "--$boundary\r\n";
-$body .= "Content-Type: text/html; charset=\"utf-8\"\r\n";
-$body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    // Recipients
+    $mail->setFrom('no-reply@ivhub.com', 'IVHUB Consent');
+    $mail->addAddress('hello@ivhub.com');
+    $mail->addAddress('riti@ivhub.com');
+    $mail->addAddress('desk@ivhub.com');
 
-$body .= "<html><body>";
-$body .= "<h2>HydraFacial Consent Form Submission</h2>";
+    $mail->isHTML(true);
+    $mail->Subject = "HydraFacial Consent Form Submission | " . $_POST['fullName'];
 
-$fields = [
-    "Full Name" => "fullName",
-    "Emirates ID / Passport" => "emiratesId",
-    "Date of Birth" => "dob",
-    "Gender" => "gender",
-    "Contact Number" => "contact",
-    "Email Address" => "email",
-    "Allergies / Medical Conditions" => "allergiesDescription",
-    "Photography Consent" => "photographyConsent",
-    "Patient Name" => "patientName",
-    "Consent Date" => "consentDate",
-    "Practitioner Name" => "practitionerName"
-];
+    // Build the email body
+    $body = "<html><body>";
+    $body .= "<h2>HydraFacial Consent Form Submission</h2>";
 
-foreach ($fields as $label => $key) {
-    $value = isset($_POST[$key]) ? nl2br(htmlspecialchars($_POST[$key])) : 'Not provided';
-    $body .= "<p><strong>$label:</strong> $value</p>";
-}
+    $fields = [
+        "Full Name" => "fullName",
+        "Emirates ID / Passport" => "emiratesId",
+        "Date of Birth" => "dob",
+        "Gender" => "gender",
+        "Contact Number" => "contact",
+        "Email Address" => "email",
+        "Allergies / Medical Conditions" => "allergiesDescription",
+        "Photography Consent" => "photographyConsent",
+        "Patient Name" => "patientName",
+        "Consent Date" => "consentDate",
+        "Practitioner Name" => "practitionerName"
+    ];
 
-// Medical Conditions list
-if (!empty($_POST['medicalConditions'])) {
-    $body .= "<p><strong>Disclosed Medical Conditions:</strong></p><ul>";
-    foreach ($_POST['medicalConditions'] as $item) {
-        $body .= "<li>" . htmlspecialchars($item) . "</li>";
+    foreach ($fields as $label => $key) {
+        $value = isset($_POST[$key]) ? nl2br(htmlspecialchars($_POST[$key])) : 'Not provided';
+        $body .= "<p><strong>$label:</strong> $value</p>";
     }
-    $body .= "</ul>";
-}
 
-$body .= "<hr><p><strong>Submission received via IVHUB HydraFacial form.</strong></p>";
-$body .= "</body></html>\r\n";
+    // Medical Conditions List
+    if (!empty($_POST['medicalConditions'])) {
+        $body .= "<p><strong>Disclosed Medical Conditions:</strong></p><ul>";
+        foreach ($_POST['medicalConditions'] as $item) {
+            $body .= "<li>" . htmlspecialchars($item) . "</li>";
+        }
+        $body .= "</ul>";
+    }
 
-// Patient Signature Attachment
-if (isset($_FILES['patientSignature']) && $_FILES['patientSignature']['error'] === UPLOAD_ERR_OK) {
-    $sigTmp = $_FILES['patientSignature']['tmp_name'];
-    $sigName = $_FILES['patientSignature']['name'];
-    $sigData = chunk_split(base64_encode(file_get_contents($sigTmp)));
-    $sigMime = mime_content_type($sigTmp);
+    $body .= "<hr><p><strong>Submission received via IVHUB HydraFacial form.</strong></p>";
+    $body .= "</body></html>";
 
-    $body .= "--$boundary\r\n";
-    $body .= "Content-Type: $sigMime; name=\"$sigName\"\r\n";
-    $body .= "Content-Disposition: attachment; filename=\"$sigName\"\r\n";
-    $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
-    $body .= $sigData . "\r\n";
-}
+    $mail->Body = $body;
 
-$body .= "--$boundary--";
+    // Attachment: Patient Signature
+    if (isset($_FILES['patientSignature']) && $_FILES['patientSignature']['error'] === UPLOAD_ERR_OK) {
+        $mail->addAttachment(
+            $_FILES['patientSignature']['tmp_name'],
+            $_FILES['patientSignature']['name']
+        );
+    }
 
-// Send the email
-if (mail($to, $subject, $body, $headers)) {
+    // Send
+    $mail->send();
     http_response_code(200);
-    echo '{"message":"HydraFacial form submitted successfully!"}';
-} else {
+    echo json_encode(["message" => "HydraFacial form submitted successfully!"]);
+
+} catch (Exception $e) {
     http_response_code(500);
-    echo '{"message":"Submission failed!"}';
+    echo json_encode(["message" => "Submission failed: {$mail->ErrorInfo}"]);
 }
 ?>
