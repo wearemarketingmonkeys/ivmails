@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
+if(empty(trim($_POST['fullName']))){
+    exit(0);
+}
+
 $mail = new PHPMailer(true);
 
 try {
