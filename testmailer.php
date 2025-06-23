@@ -16,6 +16,7 @@ try {
     $mail->Port       = 587;
 
     $mail->setFrom('noreply@ivhub.com', 'IVHUB Test');
+    $mail->addAddress('fiona@ivhub.com');
     $mail->addAddress('dipesh.macair@gmail.com');
 
     $mail->isHTML(true);
