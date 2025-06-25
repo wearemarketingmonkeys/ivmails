@@ -42,7 +42,6 @@ try {
     $mail->addAddress('hello@ivhub.com');
     $mail->addAddress('riti@ivhub.com');
     $mail->addAddress('desk@ivhub.com');
-    $mail->addAddress('dipesh.macair@gmail.com');
 
     $mail->isHTML(true);
     $mail->Subject = "Chemical Peel Consent Form Submission | " . $_POST['fullName'];
