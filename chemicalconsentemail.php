@@ -39,12 +39,11 @@ try {
 
     // Recipients
     $mail->setFrom('no-reply@ivhub.com', 'IVHUB Consent');
-    $mail->addAddress($_POST['email']);
-    $mail->addBCC('dipesh.macair@gmail.com');
+    $mail->addAddress(trim($_POST['email']));
     $mail->addReplyTo('hello@ivhub.com', 'IVHUB');
-    // $mail->addBCC('hello@ivhub.com');
-    // $mail->addBCC('riti@ivhub.com');
-    // $mail->addBCC('desk@ivhub.com');
+    $mail->addBCC('hello@ivhub.com');
+    $mail->addBCC('riti@ivhub.com');
+    $mail->addBCC('desk@ivhub.com');
 
     $mail->isHTML(true);
     $mail->Subject = "Chemical Peel Consent Form Submission | " . $_POST['fullName'];

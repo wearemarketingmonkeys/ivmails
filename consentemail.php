@@ -36,10 +36,11 @@ try {
     $mail->Port       = 587;
 
     $mail->setFrom('no-reply@ivhub.com', 'IVHUB Consent');
-    $mail->addAddress('hello@ivhub.com');
-    $mail->addAddress('riti@ivhub.com');
-    $mail->addAddress('desk@ivhub.com');
-    $mail->addAddress('fiona@ivhub.com');
+    $mail->addAddress(trim($_POST['email']));
+    $mail->addReplyTo('hello@ivhub.com', 'IVHUB');
+    $mail->addBCC('hello@ivhub.com');
+    $mail->addBCC('riti@ivhub.com');
+    $mail->addBCC('desk@ivhub.com');
 
     $mail->Subject = "IV Consent Form Submission | " . $_POST['patientName'];
     $mail->isHTML(true);
@@ -59,73 +60,41 @@ try {
             "<p><strong>Appointment Time:</strong> {$_POST['appointmentTime']}</p>";
 
     // Full consent HTML (your original content)
-    $body .= <<<HTML
-    <div>
-      <br/>
-      <p>
-        In cases involving the patient’s medical history, <strong>IV Wellness Lounge Clinic</strong> cannot assume responsibility. The administration of the multivitamin drip is
-        exclusively performed in response to the patient’s specific request.
-      </p>
-      <br/>
-      <p>
-        IV Wellness Lounge Clinic bears no responsibility for any financial consequences that may arise after or during the administration of the IV therapy drip treatment.
-      </p>
-      <br/>
-      <p>
-        IV Hub provides facilities and personnel to assist in the performance of intravenous therapy. You have the right to be informed of the procedure, any feasible alternative
-        options, the risks and benefits. Alternatives to intravenous therapy is oral supplementation and/or dietary and lifestyle changes. Except in emergencies, procedures are not
-        performed until you have had an opportunity to receive such information and to give your informed consent.
-      </p>
-      <br/>
-      <p>
-        IV Hub does not claim any clinical therapeutic outcomes, and results may vary from every individual patient. The procedure involves inserting a needle into your vein or muscle
-        and injecting the formula prescribed by your physician. It will be performed by or under the direction of your physician with qualified healthcare providers.
-      </p>
-      <br/>
-      <h4>Benefits of intravenous therapy include:</h4>
-      <ul>
-        <li>Injectables are not affected by stomach or intestinal disease.</li>
-        <li>Total amount of infusion is available to the tissues.</li>
-        <li>Nutrients are focused into cells by means of a high concentration gradient.</li>
-        <li>Higher doses of nutrients can be given than possible by mouth, without intestinal irritation.</li>
-      </ul>
-      <br/>
-      <h4>Risks of intravenous therapy include:</h4>
-      <ul>
-        <li>Potential risks of pain, discomfort, bruising, infection, or inflammation of the vein/phlebitis at or near the injection site.</li>
-        <li>Severe allergic reaction.</li>
-      </ul>
-      <br/>
-      <p><strong>Serious potential side effects could occur in the following patients:</strong></p>
-      <ul>
-        <li>G6PD deficiency (“Glucose-6-Phosphate Dehydrogenase Deficiency” also known as “Favism”)</li>
-        <li>Chronic Renal Insufficiency / decreased kidney function</li>
-        <li>Congestive Heart Failure and/or Atrial Fibrillation (“A-fib”)</li>
-        <li>Very Low Blood Pressure (e.g., below 90/60 mm Hg, especially with Magnesium IVs)</li>
-        <li>Taking Digoxin or other potassium-depleting drugs, diuretics, beta-agonists, or glucocorticoids</li>
-        <li>Hypokalemic patients (especially with Magnesium IV infusions)</li>
-        <li>Unknown allergies</li>
-        <li>Pregnant women</li>
-      </ul>
-      <br/>
-      <p>
-        You have the right to consent to or refuse any proposed treatment at any time prior to its performance.
-      </p>
-      <br/>
-      <p><strong>Your signature AFFIRMS that:</strong></p>
-      <ul>
-        <li>You understand the information provided on this form and agree to the foregoing.</li>
-        <li>The procedure(s) set forth above has been adequately explained to you by your physician.</li>
-        <li>You have received all the information and explanation you desire concerning the procedure.</li>
-        <li>You authorize and consent to the performance of the procedure(s).</li>
-      </ul>
-      <br/>
-      <p><strong>Person obtaining the consent:</strong></p>
-      <p>(I have read this patient information sheet/consent form to the subject and/or the subject has read this form. I have provided the subject with a copy of the form. An
-      explanation of the research was given and questions from the subject were solicited and answered to the subject's information. A copy of the signed consent form has been
-      provided to the participant).</p>
-    </div>
-    HTML;
+    $body .= '<p>In cases involving the patients medical history, IV Wellness Lounge Clinic cannot assume responsibility. The administration of the multivitamin drip is exclusively performed in response to the patients specific request.</p>
+    <p><b>IV Wellness Lounge Clinic bears no responsibility for any financial consequences that may arise after or during the administration of the IV therapy drip treatment.</b></p>
+                        <p><b>IV Hub</b> provides facilities and personnel to assist in the performance of intravenous therapy. You have the right to be informed of the procedure, any feasible alternative options, the risks and benefits. Alternatives to intravenous therapy is oral supplementation and/or dietary and lifestyle changes. Except in emergencies, procedures are not performed until you have had an opportunity to receive such information and to give your informed consent. <b>IV Hub</b> does not claim any clinical therapeutic outcomes, and results may vary from every individual patient.</p>
+                        <p>The procedure involves inserting a needle into your vein or muscle and injecting the formula prescribed by your physician. It will be performed by or under the direction of your physician with qualified healthcare providers.</p>
+                        <p>Benefits of intravenous therapy include:</p>
+                        <ul>
+                          <li>Injectable are not affected by stomach or intestinal disease.</li>
+                          <li>Total amount of infusion is available to the tissues.</li>
+                          <li>Nutrients are focused into cells by means of a high concentration gradient.</li>
+                          <li>Higher doses of nutrients can be given than possible by mouth, without intestinal irritation.</li>
+                        </ul>
+                        <p>Risks of intravenous therapy include:</p>
+                        <ul>
+                          <li>Potential risks of pain, discomfort, bruising, infection, or inflammation of the vein/phlebitis at or near the injection site.</li>
+                          <li>Severe allergic reaction.</li>
+                        </ul>
+                        <p>Serious potential side effects could occur in the following patients:</p>
+                        <ul>
+                          <li>A genetic defect called “Glucose-6-Phosphate Dehydrogenase Deficiency”, or G6PD--deficiency, also known as “Favism”</li>
+                          <li>Patients with Chronic Renal Insufficiency, or decreased kidney function</li>
+                          <li>Patients with Congestive Heart Failure and/or Atrial Fibrillation “A--fib”</li>
+                          <li>Patients with very Low Blood Pressure, readings lower than 90 mm Hg systolic or 60 mm Hg diastolic (esp.
+Magnesium containing IV Infusions)</li>
+                          <li>Patients taking Digoxin or other Potassium--depleting drugs, diuretics, beta-agonists, or glucocorticoids; If patient is hypokalemic (esp. Magnesium containing IV Infusions)</li>
+                          <li>Unknown allergies</li>
+                          <li>Pregnant women</li>
+                        </ul>
+                        <p>You have the right to consent to or refuse any proposed treatment at any time prior to its performance.</p>
+                        <p><b>Your signature AFFIRMS that:</b></p>
+                        <ul>
+                          <li>You understand the information provided on this form and agree to the foregoing.</li>
+                          <li>The procedure(s) set forth above has been adequately explained to you by your physician.</li>
+                          <li>You have received all the information and explanation you desire concerning the procedure.</li>
+                          <li>You authorize and consent to the performance of the procedure(s).</li>
+                        </ul>';
 
     $mail->Body = $body;
 
