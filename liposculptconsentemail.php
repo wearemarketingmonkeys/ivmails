@@ -37,10 +37,11 @@ try {
 
     $mail->setFrom('no-reply@ivhub.com', 'IVHUB Consent');
     $mail->addAddress(trim($_POST['email']));
-    $mail->addReplyTo('hello@ivhub.com', 'IVHUB');
-    $mail->addBCC('hello@ivhub.com');
-    $mail->addBCC('riti@ivhub.com');
-    $mail->addBCC('desk@ivhub.com');
+    $mail->addBCC('dipesh.macair@gmail.com');
+    // $mail->addReplyTo('hello@ivhub.com', 'IVHUB');
+    // $mail->addBCC('hello@ivhub.com');
+    // $mail->addBCC('riti@ivhub.com');
+    // $mail->addBCC('desk@ivhub.com');
 
     $mail->isHTML(true);
     $mail->Subject = "Liposculpt Consent Form Submission | " . $_POST['fullName'];
@@ -79,12 +80,12 @@ try {
         if (is_array($keys)) {
             foreach ($keys as $key) {
                 if (!empty($_POST[$key])) {
-                    $body .= "<p>☑ " . htmlspecialchars($key) . "</p>";
+                    $body .= "<p> " . htmlspecialchars($key) . "</p>";
                 }
             }
         } else if (!empty($_POST[$keys]) && is_array($_POST[$keys])) {
             foreach ($_POST[$keys] as $val) {
-                $body .= "<p>☑ " . htmlspecialchars($val) . "</p>";
+                $body .= "<p> " . htmlspecialchars($val) . "</p>";
             }
         }
     }
